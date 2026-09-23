@@ -1,20 +1,106 @@
 # Color Match
 
-My first Android application, built with **Java** while I was learning Android development.
+<img src="app/src/main/res/drawable/color_match_icon.png" width="120" alt="Color Match icon"/>
 
-This is a small learning project rather than a complete Android Studio project repository.
+**Color Match** is my first Android application, originally created as a Java learning project.
+
+Years later, I returned to the project and rebuilt it as a complete Android Studio project. The rebuilt version preserves the original game idea while fixing compatibility issues, improving the UI, and making the repository fully buildable.
 
 ## Demo
 
-The repository includes:
+[Watch the rebuilt app demo](photo_video/color_match_demo_2026.mp4)
 
-* [color_match.apk](color_match.apk) — the compiled Android application
-* [photo_video/XRecorder.mp4](photo_video/XRecorder.mp4) — a recorded demo
-* [Presentation.pdf](Presentation.pdf) — presentation materials from the original project
+The demo was recorded on a real Android 11 device after the rebuild and final testing.
 
-## Project Files
+## What the App Does
 
-Only the files that I directly modified during development were preserved:
+Color Match is a simple memory-matching game:
+
+- 16 cards are shuffled into four color groups
+- Tap a card to reveal its color
+- Match cards with the same color
+- Matched cards remain cleared
+- Use the shuffle button to start again
+
+## 2026 Rebuild
+
+The original repository only preserved a few source files from the first version.
+
+The rebuilt project now includes a complete Android/Gradle structure and can be built directly from the repository.
+
+Changes made during the rebuild include:
+
+- Recreated the project in a modern Android Studio environment
+- Migrated the original Java game logic and XML layout
+- Removed dependence on the system button background for hidden cards
+- Fixed Dark Mode behavior
+- Prevented the activity from reshuffling when the system theme changes
+- Updated card styling for modern Material components
+- Added consistent spacing and slightly rounded card corners
+- Added a custom application icon
+- Tested the rebuilt app on a real Android 11 device
+- Rebuilt and replaced the APK included in this repository
+
+The full rebuild and debugging process is documented in:
+
+[Read the Troubleshooting Log](Troubleshooting_Log.md)
+
+## Build
+
+### Requirements
+
+- Android Studio or Android SDK
+- JDK
+- Minimum Android SDK: API 23
+- Java
+- Gradle Wrapper included in this repository
+
+### Build the Debug APK
+
+From the repository root:
+
+```bash
+./gradlew clean assembleDebug
+```
+
+The generated APK will be located at:
+
+```text
+app/build/outputs/apk/debug/app-debug.apk
+```
+
+A rebuilt APK is also located at:
+
+[color_match.apk](color_match.apk)
+
+You are welcome to directly download it and play it on your Android phone if you trust me.
+
+## Repository Structure
+
+```text
+Color_Match/
+├── app/                         # Complete rebuilt Android application
+├── gradle/                      # Gradle wrapper and version configuration
+├── code_file/                   # Original source files preserved from the first version
+├── photo_video/                 # Original media and rebuilt demo video
+├── color_match.apk              # Rebuilt APK
+├── Original_Project_Archive.md  # Original screenshots, video, and presentation
+├── Presentation.pdf             # Original project presentation
+├── Troubleshooting_Log.md       # Rebuild and debugging record
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradle.properties
+├── gradlew
+└── README.md
+```
+
+## Original Project Archive
+
+The original screenshots, screen recording, setup images, and presentation are still preserved for historical reference.
+
+[View the Original Project Archive](Original_Project_Archive.md)
+
+The original source files I kept at the time are still available in:
 
 ```text
 code_file/
@@ -23,81 +109,12 @@ code_file/
 └── themes.xml
 ```
 
-The rest of the Android Studio project files were not included because they were automatically generated and were not modified as part of the exercise.
-
-### [MainActivity.java](code_file/MainActivity.java)
-
-Contains the main Java logic of the application.
-
-### [activity_main.xml](code_file/activity_main.xml)
-
-Defines the main user interface layout.
-
-### themes.xml(code_file/themes.xml)
-
-Contains theme-related customization used by the application.
-
-## Development Environment
-
-The application was originally created using:
-
-* Java
-* JDK
-* Android Studio
-* Android XML layouts
-
-During setup, I configured the Java environment variables on Windows.
-
-<img src="photo_video/java_env.jpg" width="400"/>
-
-I then created a new Android Studio project targeting an Android version compatible with my test device.
-
-<img src="photo_video/android_version.jpg" width="400"/>
-
-The following image shows the files I modified during the project:
-
-<img src="photo_video/file_upload.jpg" width="800"/>
-
-
-## APK
-
-A compiled APK is included in this repository:
-
-[color_match.apk](color_match.apk)
-
-Because the APK is distributed directly rather than through Google Play, Android may display a warning before installation.
-
-## Repository Structure
-
-```text
-Color_Match/
-├── code_file/
-│   ├── activity_main.xml
-│   ├── MainActivity.java
-│   └── themes.xml
-├── color_match.apk
-├── photo_video/
-│   ├── android_version.jpg
-│   ├── file_upload.jpg
-│   ├── java_env.jpg
-│   ├── Screenshot.jpg
-│   └── XRecorder.mp4
-├── Presentation.pdf
-└── README.md
-```
+They are intentionally preserved separately from the rebuilt `app/` project so the evolution of the project remains visible.
 
 ## About This Project
 
-This was my **first Android application**.
+This repository is both a small Android application and a record of my learning process.
 
-The goal was not to build a production-ready application, but to understand the basic Android development workflow, including:
+The first version reflects how I originally learned Android development. The rebuilt version shows how I later returned to an old project, investigated its compatibility problems, reconstructed the missing project structure, tested it on real hardware, and documented the process instead of simply replacing the old work.
 
-* Creating an Android Studio project
-* Writing basic Java application logic
-* Designing an interface with XML
-* Modifying Android themes
-* Building an APK
-* Installing and testing an application on an Android device
-
-I keep this project as a record of where my Android development journey started.
-
+That history is part of the project.
