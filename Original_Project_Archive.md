@@ -10,7 +10,7 @@ These materials are kept as a historical record of what the project looked like 
 
 ### Screenshot
 
-<img src="photo_video/Screenshot.jpg" width="400"/>
+<img src="photo_video/Screenshot.jpg" width="100"/>
 
 ### Screen Recording
 
