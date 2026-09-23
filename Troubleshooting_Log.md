@@ -701,27 +701,163 @@ This should provide:
 * A consistent grid layout
 * No dependency on the Material 3 default Button shape
 
+---
+
+## Issue 6 -- Final Testing and Repository Merge
+
+The final rebuilt version was tested successfully on the Android 11 device.
+
+The application now:
+
+- Displays the intended card colors correctly
+- Keeps the same appearance in Light Mode and Dark Mode
+- Does not reshuffle when the system theme changes
+- Uses slightly rounded cards with equal spacing
+- Builds and installs successfully
+- Includes a custom application icon
+
+A final gameplay recording was also created:
+
+```text
+photo_video/color_match_demo_2026.mp4
+````
+
+### Merging the Rebuilt Project into the Original Repository
+
+The original GitHub repository only contained the source files that had been manually preserved from the early project:
+
+```text
+code_file/
+├── activity_main.xml
+├── MainActivity.java
+└── themes.xml
+```
+
+The rebuilt project, however, now contains a complete Android/Gradle project structure.
+
+I decided to keep the original repository as the main repository and add the rebuilt Android project to it.
+
+This preserves both:
+
+```text
+code_file/
+→ original learning-project files
+
+app/
+→ rebuilt and buildable Android project
+```
+
+The Gradle wrapper and project configuration were also added:
+
+```text
+app/
+gradle/
+build.gradle.kts
+gradle.properties
+gradlew
+gradlew.bat
+settings.gradle.kts
+```
+
+### Cleaning the Repository
+
+Generated build directories were not included in Git:
+
+```text
+app/build/
+build/
+.gradle/
+```
+
+The machine-specific Android SDK configuration was also excluded:
+
+```text
+local.properties
+```
+
+The newer Android Studio `.gitignore` was used so generated files, local configuration, and build artifacts would not be committed.
+
+### Verifying the Merged Project
+
+After merging the project structure into the original repository, I rebuilt the application directly from:
+
+```text
+~/Color_Match
+```
+
+using:
+
+```bash
+./gradlew clean assembleDebug
+```
+
+Result:
+
+```text
+BUILD SUCCESSFUL
+```
+
+This confirmed that the merged repository itself contains a working Android project and can successfully generate the application.
+
+The newly built APK then replaced the original repository APK:
+
+```text
+color_match.apk
+```
+
+The final demo recording was also added to:
+
+```text
+photo_video/color_match_demo_2026.mp4
+```
+
+### Git Verification
+
+Before committing, all intended files were staged with:
+
+```bash
+git add .
+git status
+```
+
+Git correctly included the Android source code, Gradle configuration, updated APK, icon, and demo video.
+
+Generated build directories and local machine configuration did not appear in the staged files.
+
 ### Current Status
 
 ```text
-APK installation on Android 11
-→ SUCCESS
-
-Light/Dark color consistency
-→ PASSED
-
-Theme change reshuffling
+Dark Mode issue
 → RESOLVED
 
-Material 3 circular card appearance
-→ Cause identified
+Theme-change reshuffling
+→ RESOLVED
 
-Card spacing and corner radius
-→ Updated
-→ Final device verification pending
+Card UI compatibility
+→ RESOLVED
+
+Android 11 device testing
+→ PASSED
+
+Custom icon
+→ ADDED
+
+Gameplay demo
+→ RECORDED
+
+Complete Android project
+→ MERGED INTO ORIGINAL REPOSITORY
+
+Merged repository build
+→ BUILD SUCCESSFUL
+
+Git staging verification
+→ PASSED
+
+Final commit and push
+→ PENDING
 ```
 
-The next step is to rebuild and reinstall the APK once more to verify the final card shape and spacing on the Android test device.
 
 
 
