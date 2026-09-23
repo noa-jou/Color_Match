@@ -1,52 +1,103 @@
 # Color Match
-A little Android Application by Java
+
+My first Android application, built with **Java** while I was learning Android development.
+
+This is a small learning project rather than a complete Android Studio project repository.
+
+## Demo
+
+The repository includes:
+
+* [color_match.apk](color_match.apk) — the compiled Android application
+* [photo_video/XRecorder.mp4](photo_video/XRecorder.mp4) — a recorded demo
+* [Presentation.pdf](Presentation.pdf) — presentation materials from the original project
+
+## Project Files
+
+Only the files that I directly modified during development were preserved:
+
+```text
+code_file/
+├── activity_main.xml
+├── MainActivity.java
+└── themes.xml
+```
+
+The rest of the Android Studio project files were not included because they were automatically generated and were not modified as part of the exercise.
+
+### [MainActivity.java](code_file/MainActivity.java)
+
+Contains the main Java logic of the application.
+
+### [activity_main.xml](code_file/activity_main.xml)
+
+Defines the main user interface layout.
+
+### themes.xml(code_file/themes.xml)
+
+Contains theme-related customization used by the application.
+
+## Development Environment
+
+The application was originally created using:
+
+* Java
+* JDK
+* Android Studio
+* Android XML layouts
+
+During setup, I configured the Java environment variables on Windows.
+
+<img src="photo_video/java_env.jpg" width="400"/>
+
+I then created a new Android Studio project targeting an Android version compatible with my test device.
+
+<img src="photo_video/android_version.jpg" width="400"/>
+
+The following image shows the files I modified during the project:
+
+<img src="photo_video/file_upload.jpg" width="800"/>
 
 
-https://user-images.githubusercontent.com/58361477/158130880-91de1a78-dbc0-4dd3-9ad8-439f8915edd3.mp4
+## APK
 
+A compiled APK is included in this repository:
 
+[color_match.apk](color_match.apk)
 
-How to make it︰
-<br/><br/>
-1 ) Download JDK and Android Studio
-<br/>
+Because the APK is distributed directly rather than through Google Play, Android may display a warning before installation.
 
-2 ) 修改環境變數︰系統>關於>進階系統設定>進階>環境變數>
-<br/>
-<img src="https://github.com/katejou/color_match/blob/main/photo_video/java_env.jpg" width="400"/>
-<br/>
+## Repository Structure
 
-3 ) 開新專案(選自己手機正在用的Android版本)
-<br/>
-<img src="https://github.com/katejou/color_match/blob/main/photo_video/android_version.jpg" width="400"/>
-<br/>
+```text
+Color_Match/
+├── code_file/
+│   ├── activity_main.xml
+│   ├── MainActivity.java
+│   └── themes.xml
+├── color_match.apk
+├── photo_video/
+│   ├── android_version.jpg
+│   ├── file_upload.jpg
+│   ├── java_env.jpg
+│   ├── Screenshot.jpg
+│   └── XRecorder.mp4
+├── Presentation.pdf
+└── README.md
+```
 
-4 ) 撰寫程式(只改了這三個檔案，其他沒碰，所以也不上傳了)
-<br/>
-<img src="https://github.com/katejou/color_match/blob/main/photo_video/file_upload.jpg" width="800"/>
-<br/>
-這三個檔案，我放在code_file的資料夾裡面
-<br/>
+## About This Project
 
-5 ) themes.xml的內容，我參考了︰
-<br/>
-https://zcgnotes.com/%E8%A7%A3%E6%B1%BAandroid-studio-button%E7%84%A1%E6%B3%95%E6%94%B9%E8%AE%8A%E8%83%8C%E6%99%AF%E9%A1%8F%E8%89%B2/
-<br/>
-來修改。
-<br/>
+This was my **first Android application**.
 
-6 ) 分享
-<br/>
-我上傳了這個apk檔，供大家下載到手機自己玩。
-<br/>
-在你的手機中開啟它，它就會建立成為一個應用程式。
-<br/>
-當然Android會警告你，因為我沒有將這個APP上架，沒有經過官方的檢查。
-<br/>
-但是我聽說上架的話，創作者要付錢給Google……所以我就算了。
-<br/>
-(大家可以按我上面所說的方法，自己建一個apk，再下載到自己的手機之類…)
-<br/>
-<br/>
-<br/>
-<br/>
+The goal was not to build a production-ready application, but to understand the basic Android development workflow, including:
+
+* Creating an Android Studio project
+* Writing basic Java application logic
+* Designing an interface with XML
+* Modifying Android themes
+* Building an APK
+* Installing and testing an application on an Android device
+
+I keep this project as a record of where my Android development journey started.
+

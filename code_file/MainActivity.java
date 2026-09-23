@@ -3,7 +3,6 @@ package com.example.color_match;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
 
     Button card_ary[] = new Button[16]; // all the card 所有牌
     String[] color_ary; // their front color 所有翻出來的顏色
-    Drawable original; // their back 蓋上的牌的樣子
     int onpick_index = 0; // show 2 card at once at most每次只顯示兩張牌 0 或 1
     int[] onpick = new int[2]; // the 2 card that are showing right now 正在顯示的兩張牌
     int match = 0; // counting on clear times 已配對好的數量
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         card_ary[15] = (Button) findViewById(R.id.sixteen);
 
         // setting in the beginning
-        original = card_ary[0].getBackground();
+        
         color_ary = new String[]{"R", "R", "R", "R", "G", "G", "G", "G", "B", "B", "B", "B", "O", "O", "O", "O"};
         // R = red, G = green, B = blue, O = orange
         shuffle_color_ary();
@@ -70,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         //cover all the cards, 重新把所有牌蓋上
         for (Button a : card_ary) {
-            a.setBackground(original);
-            a.setClickable(true);
+            hideCard(a);
         }
 
         onpick_index = 0;
@@ -220,12 +217,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void hideCard(Button card) {
+        card.setBackgroundColor(Color.GRAY);
+        card.setClickable(true);
+    }
+
     // hide the first card. 蓋好第一張牌
     public void hideTheFirst() {
-
-        card_ary[onpick[0]].setBackground(original);
-        card_ary[onpick[0]].setClickable(true);
-
+        hideCard(card_ary[onpick[0]]);
     }
 
 
