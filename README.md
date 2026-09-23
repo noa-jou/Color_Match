@@ -71,9 +71,13 @@ app/build/outputs/apk/debug/app-debug.apk
 
 A rebuilt APK is also located at:
 
-[color_match.apk](color_match.apk)
+```
+color_match.apk
+```
 
-You are welcome to directly download it and play it on your Android phone if you trust me.
+You are welcome to directly download it, install and play it on your Android phone if you trust me that much.
+
+
 
 ## Repository Structure
 
