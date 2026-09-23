@@ -75,7 +75,7 @@ A rebuilt APK is also located at:
 color_match.apk
 ```
 
-You are welcome to directly download it, install and play it on your Android phone if you trust me that much.
+You are welcome to download, install, and play it directly on your Android phone if you trust me that much.
 
 
 
