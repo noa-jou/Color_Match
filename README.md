@@ -8,7 +8,7 @@ Years later, I returned to the project and rebuilt it as a complete Android Stud
 
 ## Demo
 
-[Watch the rebuilt app demo](photo_video/color_match_demo_2026.mp4)
+https://github.com/user-attachments/assets/9088f8bb-ff3a-487a-b2ee-66f1ed12e923
 
 The demo was recorded on a real Android 11 device after the rebuild and final testing.
 
