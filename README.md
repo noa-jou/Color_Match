@@ -45,22 +45,163 @@ The full rebuild and debugging process is documented in:
 
 [Read the Troubleshooting Log](Troubleshooting_Log.md)
 
-## Build
+## Build from Source on Debian
+
+Color Match can be built entirely from the command line. Android Studio is not required.
 
 ### Requirements
 
-- Android Studio or Android SDK
-- JDK
-- Minimum Android SDK: API 23
-- Java
-- Gradle Wrapper included in this repository
+This project currently uses:
 
-### Build the Debug APK
+```text
+JDK: 17
+Compile SDK: Android API 37
+Target SDK: Android API 37
+Minimum SDK: Android API 23
+Android Gradle Plugin: 9.4.1
+Gradle Wrapper: 9.6.0
+SDK Build Tools: 36.0.0
+```
 
-From the repository root:
+> `minSdk 23` means that the app can run on Android API 23 or newer.
+> The build machine still needs Android API 37 because this project is compiled with `compileSdk 37`.
+
+### 1. Install the basic tools
+
+```bash
+sudo apt update
+( sudo apt upgrade -y )<- That is just a suggestion, not necessary
+
+sudo apt install -y \
+  git \
+  openjdk-17-jdk \
+  wget \
+  unzip
+```
+
+Check Java:
+
+```bash
+java -version
+```
+
+It should report Java 17.
+
+### 2. Clone the repository
+
+```bash
+cd ~
+
+git clone https://github.com/noa-jou/Color_Match.git
+
+cd Color_Match
+```
+
+### 3. Install the Android SDK Command-Line Tools
+
+Create the Android SDK directory:
+
+```bash
+export ANDROID_HOME="$HOME/Android/Sdk"
+
+mkdir -p "$ANDROID_HOME/cmdline-tools/latest"
+```
+
+Download the Android command-line tools:
+
+```bash
+cd /tmp
+
+wget https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip
+```
+
+Extract them:
+
+```bash
+rm -rf /tmp/android-command-line-tools
+
+mkdir -p /tmp/android-command-line-tools
+
+unzip -q commandlinetools-linux-15859902_latest.zip \
+  -d /tmp/android-command-line-tools
+```
+
+Move the tools into the Android SDK directory:
+
+```bash
+cp -r /tmp/android-command-line-tools/cmdline-tools/* \
+  "$ANDROID_HOME/cmdline-tools/latest/"
+```
+
+Add the Android tools to the current shell:
+
+```bash
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+```
+
+Check that `sdkmanager` is available:
+
+```bash
+sdkmanager --version
+```
+
+### 4. Install the SDK packages required by Color Match
+
+Accept the Android SDK licences:
+
+```bash
+yes | sdkmanager --licenses
+```
+
+Install the required Android SDK components:
+
+```bash
+sdkmanager \
+  "platform-tools" \
+  "platforms;android-37" \
+  "build-tools;36.0.0"
+```
+
+### 5. Configure the SDK location for the project
+
+Return to the repository:
+
+```bash
+cd ~/Color_Match
+```
+
+Create the local SDK configuration:
+
+```bash
+printf 'sdk.dir=%s\n' "$ANDROID_HOME" > local.properties
+```
+
+`local.properties` contains a machine-specific SDK path and is intentionally excluded from Git.
+
+It should look similar to:
+
+```text
+sdk.dir=/home/your-user-name/Android/Sdk
+```
+
+### 6. Build the APK
+
+Make sure the Gradle wrapper is executable:
+
+```bash
+chmod +x gradlew
+```
+
+Build a clean debug APK:
 
 ```bash
 ./gradlew clean assembleDebug
+```
+
+A successful build should end with:
+
+```text
+BUILD SUCCESSFUL
 ```
 
 The generated APK will be located at:
@@ -69,7 +210,34 @@ The generated APK will be located at:
 app/build/outputs/apk/debug/app-debug.apk
 ```
 
-A rebuilt APK is also located at:
+Check it with:
+
+```bash
+ls -lh app/build/outputs/apk/debug/app-debug.apk
+```
+
+### Optional: Install the APK on a connected Android device
+
+If USB debugging is enabled and the device is visible through ADB:
+
+```bash
+adb devices
+```
+
+install the APK with:
+
+```bash
+adb install -r --no-streaming \
+  app/build/outputs/apk/debug/app-debug.apk
+```
+
+The generated APK will be located at:
+
+```text
+app/build/outputs/apk/debug/app-debug.apk
+```
+
+### A rebuilt APK by me is also located at:
 
 ```
 color_match.apk
