@@ -49,45 +49,64 @@ The full rebuild and debugging process is documented in:
 
 Color Match can be built entirely from the command line. Android Studio is not required.
 
-### Requirements
+This procedure was tested on **Chromebook Linux (Debian 13 / Trixie)**.
 
-This project currently uses:
+> **Chromebook note:**  
+> In the Linux Terminal, use `Ctrl + Shift + V` to paste.  
+> `Ctrl + V` may appear as `^V` instead of pasting text.
+
+### Project Requirements
+
+The current project uses:
 
 ```text
-JDK: 17
 Compile SDK: Android API 37
 Target SDK: Android API 37
 Minimum SDK: Android API 23
 Android Gradle Plugin: 9.4.1
 Gradle Wrapper: 9.6.0
-SDK Build Tools: 36.0.0
+Build Tools: 36.0.0
 ```
 
-> `minSdk 23` means that the app can run on Android API 23 or newer.
-> The build machine still needs Android API 37 because this project is compiled with `compileSdk 37`.
+`minSdk 23` means that the app can run on Android API 23 or newer.
+
+It does **not** mean that the build computer only needs Android API 23.
+
+---
 
 ### 1. Install the basic tools
 
+Update the Debian package list:
+
 ```bash
 sudo apt update
-( sudo apt upgrade -y )<- That is just a suggestion, not necessary
-
-sudo apt install -y \
-  git \
-  openjdk-17-jdk \
-  wget \
-  unzip
 ```
 
-Check Java:
+Install Git, Java, Wget, and Unzip:
+
+```bash
+sudo apt install -y git default-jdk wget unzip
+```
+
+`default-jdk` is used instead of requesting a specific Java package because the available JDK version may differ between Debian releases.
+
+For example, Debian 13 installed OpenJDK 21 during testing.
+
+Verify the installation:
 
 ```bash
 java -version
+javac -version
+git --version
+wget --version | head -n 1
+unzip -v | head -n 1
 ```
 
-It should report Java 17.
+> `sudo apt upgrade` is optional and is not required just to build this project.
 
-### 2. Clone the repository
+---
+
+### 2. Clone Color Match
 
 ```bash
 cd ~
@@ -97,72 +116,148 @@ git clone https://github.com/noa-jou/Color_Match.git
 cd Color_Match
 ```
 
-### 3. Install the Android SDK Command-Line Tools
+---
 
-Create the Android SDK directory:
+### 3. Create the Android SDK directory
+
+Set the Android SDK location for the current Terminal session:
 
 ```bash
 export ANDROID_HOME="$HOME/Android/Sdk"
+```
 
+Create the command-line tools directory:
+
+```bash
 mkdir -p "$ANDROID_HOME/cmdline-tools/latest"
 ```
 
-Download the Android command-line tools:
+---
+
+### 4. Download the Android command-line tools
+
+Move to a temporary directory:
 
 ```bash
 cd /tmp
+```
 
+Download Google's Android SDK command-line tools:
+
+```bash
 wget https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip
 ```
 
-Extract them:
+Prepare a temporary extraction directory:
 
 ```bash
 rm -rf /tmp/android-command-line-tools
 
 mkdir -p /tmp/android-command-line-tools
+```
 
+Extract the package:
+
+```bash
 unzip -q commandlinetools-linux-15859902_latest.zip \
   -d /tmp/android-command-line-tools
 ```
 
-Move the tools into the Android SDK directory:
+Copy the command-line tools into the Android SDK:
 
 ```bash
 cp -r /tmp/android-command-line-tools/cmdline-tools/* \
   "$ANDROID_HOME/cmdline-tools/latest/"
 ```
 
-Add the Android tools to the current shell:
+Add the Android tools to the current Terminal session:
 
 ```bash
 export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 ```
 
-Check that `sdkmanager` is available:
+Verify `sdkmanager`:
 
 ```bash
 sdkmanager --version
 ```
 
-### 4. Install the SDK packages required by Color Match
+A deprecation warning from `sdkmanager` does not necessarily mean that the installation failed.
 
-Accept the Android SDK licences:
+---
+
+### 5. Accept the Android SDK licences
 
 ```bash
 yes | sdkmanager --licenses
 ```
 
-Install the required Android SDK components:
+Continue until you see:
+
+```text
+All SDK package licenses accepted
+```
+
+If this appears afterward:
+
+```text
+yes: standard output: Broken pipe
+```
+
+it can be ignored. It only means that `sdkmanager` finished before the `yes` command stopped sending input.
+
+---
+
+### 6. Check the available Android 37 SDK package
+
+Do not assume that the package is named exactly:
+
+```text
+platforms;android-37
+```
+
+Check the available Android platforms first:
+
+```bash
+sdkmanager --list | grep -E '^  platforms;android-|^platforms;android-'
+```
+
+You can also check the available Build Tools:
+
+```bash
+sdkmanager --list | grep 'build-tools;'
+```
+
+During testing on Debian 13, the available Android 37 platforms included:
+
+```text
+platforms;android-37.0
+platforms;android-37.1
+platforms;android-37.2
+```
+
+while:
+
+```text
+platforms;android-37
+```
+
+was not available.
+
+The tested installation therefore used:
 
 ```bash
 sdkmanager \
   "platform-tools" \
-  "platforms;android-37" \
+  "platforms;android-37.2" \
   "build-tools;36.0.0"
 ```
 
-### 5. Configure the SDK location for the project
+If a future Android SDK exposes a newer `android-37.x` package instead, use the available Android 37 package shown by `sdkmanager --list`.
+
+---
+
+### 7. Configure the SDK location for Gradle
 
 Return to the repository:
 
@@ -170,13 +265,17 @@ Return to the repository:
 cd ~/Color_Match
 ```
 
-Create the local SDK configuration:
+Create the machine-specific `local.properties` file:
 
 ```bash
 printf 'sdk.dir=%s\n' "$ANDROID_HOME" > local.properties
 ```
 
-`local.properties` contains a machine-specific SDK path and is intentionally excluded from Git.
+Check it:
+
+```bash
+cat local.properties
+```
 
 It should look similar to:
 
@@ -184,19 +283,33 @@ It should look similar to:
 sdk.dir=/home/your-user-name/Android/Sdk
 ```
 
-### 6. Build the APK
+`local.properties` is intentionally excluded from Git because the SDK path is different on every computer.
 
-Make sure the Gradle wrapper is executable:
+Without this file, Gradle may fail with:
+
+```text
+SDK location not found.
+Define a valid SDK location with an ANDROID_HOME environment variable
+or by setting the sdk.dir path in your project's local properties file.
+```
+
+---
+
+### 8. Build the APK
+
+Make sure the included Gradle wrapper is executable:
 
 ```bash
 chmod +x gradlew
 ```
 
-Build a clean debug APK:
+Build the project:
 
 ```bash
 ./gradlew clean assembleDebug
 ```
+
+There is no need to install Gradle separately because this repository already includes the Gradle wrapper.
 
 A successful build should end with:
 
@@ -204,40 +317,60 @@ A successful build should end with:
 BUILD SUCCESSFUL
 ```
 
-The generated APK will be located at:
+The new APK will be generated at:
 
 ```text
 app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Check it with:
+Verify it:
 
 ```bash
 ls -lh app/build/outputs/apk/debug/app-debug.apk
 ```
 
+---
+
+### Optional: Keep the Android SDK commands available after restarting Linux
+
+The earlier `export` commands only apply to the current Terminal session.
+
+To make them persistent:
+
+```bash
+echo 'export ANDROID_HOME="$HOME/Android/Sdk"' >> ~/.bashrc
+
+echo 'export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"' >> ~/.bashrc
+
+source ~/.bashrc
+```
+
+You can verify them with:
+
+```bash
+echo "$ANDROID_HOME"
+
+sdkmanager --version
+```
+
+---
+
 ### Optional: Install the APK on a connected Android device
 
-If USB debugging is enabled and the device is visible through ADB:
+If Android Debug Bridge can see the device:
 
 ```bash
 adb devices
 ```
 
-install the APK with:
+install or update Color Match with:
 
 ```bash
 adb install -r --no-streaming \
   app/build/outputs/apk/debug/app-debug.apk
 ```
 
-The generated APK will be located at:
-
-```text
-app/build/outputs/apk/debug/app-debug.apk
-```
-
-### A rebuilt APK by me is also located at:
+## A rebuilt APK by me is also located at:
 
 ```
 color_match.apk
@@ -245,26 +378,7 @@ color_match.apk
 
 You are welcome to download, install, and play it directly on your Android phone if you trust me that much.
 
-
-
-## Repository Structure
-
-```text
-Color_Match/
-├── app/                         # Complete rebuilt Android application
-├── gradle/                      # Gradle wrapper and version configuration
-├── code_file/                   # Original source files preserved from the first version
-├── photo_video/                 # Original media and rebuilt demo video
-├── color_match.apk              # Rebuilt APK
-├── Original_Project_Archive.md  # Original screenshots, video, and presentation
-├── Presentation.pdf             # Original project presentation
-├── Troubleshooting_Log.md       # Rebuild and debugging record
-├── build.gradle.kts
-├── settings.gradle.kts
-├── gradle.properties
-├── gradlew
-└── README.md
-```
+---
 
 ## Original Project Archive
 
