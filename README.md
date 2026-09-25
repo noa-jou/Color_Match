@@ -4,7 +4,7 @@
 
 **Color Match** is my first Android application, originally created as a Java learning project.
 
-Years later, I returned to the project and rebuilt it as a complete Android Studio project. The rebuilt version preserves the original game idea while fixing compatibility issues, improving the UI, and making the repository fully buildable.
+Years later, I returned to the project and rebuilt it as a complete Android Studio project. The rebuilt version preserves the original game idea while fixing compatibility issues, improving the UI, and making the repository fully buildable. This project was refactored with the help of ChatGPT. I personally reviewed all the code and made an effort to understand each change and the reasoning behind it.
 
 ## Demo
 
